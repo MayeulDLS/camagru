@@ -1,22 +1,16 @@
 const express = require('express');
+const mongoose = require("mongoose");
+const userRoutes = require("./routes/userRoutes");
+
 const app = express();
 
-// Middleware pour parser les requêtes JSON
-app.use(express.json());
-
-// Définir quelques routes de base
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
 });
 
-// Importer et utiliser d'autres routes
-// const someRoute = require('./routes/someRoute');
-// app.use('/someRoute', someRoute);
-
-// Gestion d'erreurs générales (exemple)
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+app.use('/api', userRoutes);
 
 module.exports = app;

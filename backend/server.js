@@ -25,20 +25,20 @@ server.on('listening', () => {
 });
 
 // Connexion à MongoDB et démarrage du serveur
-//const mongoUri = process.env.MONGO_URI;
-//mongoose.connect(mongoUri, {
-//  useNewUrlParser: true,
-//  useUnifiedTopology: true,
-//})
-//.then(() => {
-//  console.log('Connected to MongoDB : ', process.env.MONGO_URI);
+const mongoUri = process.env.MONGO_URI;
+mongoose.connect(mongoUri, {
+ useNewUrlParser: true,
+ useUnifiedTopology: true,
+})
+.then(() => {
+ console.log('Connected to MongoDB : ', process.env.MONGO_URI);
 
   // Démarrer le serveur une fois connecté à MongoDB
   server.listen(port, () => {
     console.log('Server is running on port ' + port);
   });
-//})
-//.catch(err => {
-//  console.error('Failed to connect to MongoDB', err);
-//  process.exit(1); // Arrêter le processus si la connexion échoue
-//});
+})
+.catch(err => {
+ console.error('Failed to connect to MongoDB', err);
+ process.exit(1); // Arrêter le processus si la connexion échoue
+});
