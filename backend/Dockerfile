@@ -10,5 +10,5 @@ COPY . .
 EXPOSE 5038
 
 # Default command
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
 
