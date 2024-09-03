@@ -1,8 +1,12 @@
-const { getUsers, createUser, loginUser } = require("../services/userServices");
+const { getUser, createUser, loginUser } = require("../services/userServices");
 
-const getUsersController = async (req, res) => {
+const getUserController = async (req, res) => {
     try {
-        const result = await getUsers();
+        const { email } = req.body;
+        if (!email) {
+            throw new Error("Email necessary");
+        }
+        const result = await getUser(email);
         res.send({ result });
     } catch (error) {
         console.error("Error in User controller : ", error);
@@ -45,7 +49,7 @@ const loginController = async (req, res) => {
 };
 
 module.exports = {
-    getUsersController,
+    getUserController,
     createUserController,
     loginController,
 };

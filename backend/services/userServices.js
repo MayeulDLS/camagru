@@ -2,9 +2,12 @@ const User = require("../models/usersModel.ts");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/jwt.js")
 
-const getUsers = async () => {
-    const result = await User.find();
-    return result;
+const getUser = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error("No user for this email");
+    }
+    return user;
 };
 
 const createUser = async ({ email, username, password }) => {
@@ -54,7 +57,7 @@ const loginUser = async ({ email, password }) => {
 }
 
 module.exports = {
-    getUsers,
+    getUser,
     createUser,
     loginUser,
 };
