@@ -1,5 +1,6 @@
 const User = require("../models/usersModel.ts");
 const bcrypt = require("bcrypt");
+const { generateToken } = require("../utils/jwt.js")
 
 const getUsers = async () => {
     const result = await User.find();
@@ -23,14 +24,37 @@ const createUser = async ({ email, username, password }) => {
 
         const { password: _, ...userWithoutPassword } = savedUser.toObject();
 
-        return userWithoutPassword;
+        const token = generateToken(savedUser);
+
+        return { token, userWithoutPassword };
     } catch (error) {
         console.error("Error creating user : ", error.message);
         throw new Error("Error creating user");
     }
 }
 
+const loginUser = async ({ email, password }) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw new Error("No user for this email");
+        }
+
+        const passwordIsValid = await bcrypt.compare(password, user.password);
+        if (!passwordIsValid) {
+            throw new Error("Invalid password");
+        }
+
+        const token = generateToken(user);
+
+        return { token, user };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 module.exports = {
     getUsers,
     createUser,
+    loginUser,
 };

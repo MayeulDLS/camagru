@@ -1,4 +1,4 @@
-const { getUsers, createUser } = require("../services/userServices");
+const { getUsers, createUser, loginUser } = require("../services/userServices");
 
 const getUsersController = async (req, res) => {
     try {
@@ -27,7 +27,25 @@ const createUserController = async (req, res) => {
     }
 };
 
+const loginController = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).send("Missing credential");
+        }
+
+        const { token, user } = await loginUser(email, password);
+
+        res.status(200).json({ token, user });
+    } catch (error) {
+        console.error("Error in login controller : ", error.message);
+        res.status(401).send("Authentication failed");
+    }
+};
+
 module.exports = {
     getUsersController,
     createUserController,
+    loginController,
 };
