@@ -35,12 +35,12 @@ const loginController = async (req, res) => {
             return res.status(400).send("Missing credential");
         }
 
-        const { token, user } = await loginUser(email, password);
+        const { token, user } = await loginUser({ email, password });
 
         res.status(200).json({ token, user });
     } catch (error) {
         console.error("Error in login controller : ", error.message);
-        res.status(401).send("Authentication failed");
+        res.status(401).send("Authentication failed", error.message);
     }
 };
 
