@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
 
     const pages = {
-        home: '<h1>Welcome to Home</h1><p>You are already logged in.</p>',
+        home: '<h1>Welcome to Home</h1>',
         signup: `
             <h1>Sign Up</h1>
             <form id="signup-form">
@@ -27,7 +27,36 @@ document.addEventListener('DOMContentLoaded', () => {
         `
     };
 
-    const loadPage = (page) => {
+    const loadPage = async (page) => {
+        const publicPages = ["signup", "signin"];
+        if (!publicPages.includes(page)) {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                mainContent.innerHTML = pages["signin"];
+                document.getElementById('signin-form').addEventListener('submit', handleSignin);
+                return;
+            }
+            
+            try {
+                const response = await fetch("http://localhost:5038/api/getuser", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    mainContent.innerHTML = pages["signin"];
+                    document.getElementById('signin-form').addEventListener('submit', handleSignin);
+                    return;
+                }
+            } catch (error) {
+                console.error("error : ", error);
+                mainContent.innerHTML = pages["signin"];
+                document.getElementById('signin-form').addEventListener('submit', handleSignin);
+                return;
+            }
+        }
         mainContent.innerHTML = pages[page];
         if (page === 'signup') {
             document.getElementById('signup-form').addEventListener('submit', handleSignup);
