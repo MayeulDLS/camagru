@@ -18,11 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'home.html';
             } else {
                 const error = await response.json();
-                console.error('Error: ', error.message);
+                alert("Erreur : " + error.message);
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error: Could not log in');
         }
     });
 });

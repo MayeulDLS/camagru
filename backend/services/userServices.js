@@ -12,9 +12,13 @@ const getUser = async (id) => {
 
 const createUser = async ({ email, username, password }) => {
     try {
-        const userAlreadyExists = await User.findOne({ $or: [{ email }, { username }] });
-        if (userAlreadyExists) {
-            throw new Error("Email or Username already in use");
+        const emailAlreadyInUse = await User.findOne({ email });
+        if (emailAlreadyInUse) {
+            throw new Error("Email already in use");
+        }
+        const usernameAlreadyTaken = await User.findOne({ username });
+        if (usernameAlreadyTaken) {
+            throw new Error("Username already taken");
         }
 
         if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
@@ -36,7 +40,7 @@ const createUser = async ({ email, username, password }) => {
         return { token, user: userWithoutPassword };
     } catch (error) {
         console.error("Error creating user : ", error.message);
-        throw new Error("Error creating user");
+        throw new Error(error.message);
     }
 }
 

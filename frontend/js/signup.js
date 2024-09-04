@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 localStorage.setItem("token", result.token);
                 window.location.href = 'home.html';
+            } else {
+                const error = await response.json();
+                alert("Erreur : " + error.message);
             }
         } catch (error) {
             console.error('Error:', error);
