@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('email').value;
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+            const errorMessage = document.getElementById("password-error");
+            errorMessage.textContent = "Votre mot de passe doit contenir au moins 6 caracteres, un caractere alphabetique et un caractere numerique.";
+            return;
+        }
+
         const userData = { email, username, password };
 
         try {

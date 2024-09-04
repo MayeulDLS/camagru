@@ -17,6 +17,10 @@ const createUser = async ({ email, username, password }) => {
             throw new Error("Email or Username already in use");
         }
 
+        if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+            throw new Error("Invalid password");
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
