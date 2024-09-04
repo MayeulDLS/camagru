@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log(result);
                 localStorage.setItem("token", result.token);
                 window.location.href = 'home.html';
             } else {
