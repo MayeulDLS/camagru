@@ -2,12 +2,8 @@ const { getUser, createUser, loginUser } = require("../services/userServices");
 
 const getUserController = async (req, res) => {
     try {
-        const { email } = req.body;
-        if (!email) {
-            throw new Error("Email necessary");
-        }
-        const result = await getUser(email);
-        res.send({ result });
+        const result = await getUser(req.user.id);
+        res.send(result);
     } catch (error) {
         console.error("Error in User controller : ", error);
         res.status(500).send("Internal Sever Error");

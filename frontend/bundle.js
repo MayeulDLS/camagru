@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
 
     const pages = {
-        home: '<h1>Welcome to Home</h1>',
+        home: '<p>You are logged in</p>',
         signup: `
-            <h1>Sign Up</h1>
             <form id="signup-form">
                 <h3>Email</h3>
                 <input id="signup-email" type="email" required />
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>
         `,
         signin: `
-            <h1>Sign In</h1>
             <form id="signin-form">
                 <h3>Email</h3>
                 <input id="signin-email" type="email" required />
@@ -44,14 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         "Authorization": `Bearer ${token}`
                     }
                 });
-
+    
                 if (response.status === 401) {
                     mainContent.innerHTML = pages["signin"];
                     document.getElementById('signin-form').addEventListener('submit', handleSignin);
                     return;
                 }
+    
+                const user = await response.json();
+                const titleElement = document.getElementById('title');
+                if (titleElement && page === "home") {
+                    titleElement.textContent = `Welcome ${user.username}`;
+                }
             } catch (error) {
-                console.error("error : ", error);
+                console.error(error);
                 mainContent.innerHTML = pages["signin"];
                 document.getElementById('signin-form').addEventListener('submit', handleSignin);
                 return;
@@ -59,8 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         mainContent.innerHTML = pages[page];
         if (page === 'signup') {
+            document.getElementById('title').textContent = `Sign up`;
             document.getElementById('signup-form').addEventListener('submit', handleSignup);
         } else if (page === 'signin') {
+            document.getElementById('title').textContent = `Sign in`;
             document.getElementById('signin-form').addEventListener('submit', handleSignin);
         }
     };

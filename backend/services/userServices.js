@@ -2,10 +2,10 @@ const User = require("../models/usersModel.ts");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/jwt.js")
 
-const getUser = async (email) => {
-    const user = await User.findOne({ email });
+const getUser = async (id) => {
+    const user = await User.findById(id);
     if (!user) {
-        throw new Error("No user for this email");
+        throw new Error("User not found");
     }
     return user;
 };
