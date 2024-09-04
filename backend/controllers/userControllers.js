@@ -20,7 +20,7 @@ const createUserController = async (req, res) => {
 
         const result = await createUser({email, username, password});
 
-        res.status(201).send({ result });
+        res.status(201).send(result);
     } catch (error) {
         console.error("Error in User controller : ", error);
         res.status(500).send("Internal Sever Error");
@@ -40,7 +40,7 @@ const loginController = async (req, res) => {
         res.status(200).json({ token, user });
     } catch (error) {
         console.error("Error in login controller : ", error.message);
-        res.status(401).send("Authentication failed", error.message);
+        res.status(401).send("Authentication failed : " + error.message);
     }
 };
 

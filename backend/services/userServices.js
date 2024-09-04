@@ -29,7 +29,7 @@ const createUser = async ({ email, username, password }) => {
 
         const token = generateToken(savedUser);
 
-        return { token, userWithoutPassword };
+        return { token, user: userWithoutPassword };
     } catch (error) {
         console.error("Error creating user : ", error.message);
         throw new Error("Error creating user");
