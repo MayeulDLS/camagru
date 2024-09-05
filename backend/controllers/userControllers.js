@@ -1,4 +1,5 @@
 const { getUser, createUser, loginUser, updateEmail, updateUsername, updatePassword } = require("../services/userServices");
+const { sendEmail } = require("../utils/sendMail");
 
 const getUserController = async (req, res) => {
     try {
@@ -87,6 +88,8 @@ const loginController = async (req, res) => {
         }
 
         const { token, user } = await loginUser({ email, password });
+
+        sendEmail("mdelaserre@hotmail.fr", "hello", "mail envoye");
 
         res.status(200).json({ token, user });
     } catch (error) {
