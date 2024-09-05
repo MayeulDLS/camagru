@@ -10,6 +10,74 @@ const getUser = async (id) => {
     return user;
 };
 
+const updateEmail = async (id, email) => {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (!/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            throw new Error("Invalid email");
+        }
+
+        const emailAlreadyInUse = await User.findOne({ email });
+        if (emailAlreadyInUse) {
+            throw new Error("Email already in use")
+        }
+
+        user.email = email;
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updateUsername = async (id, username) => {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const usernameAlreadyInUse = await User.findOne({ username });
+        if (usernameAlreadyInUse) {
+            throw new Error("Username already in use")
+        }
+
+        user.username = username;
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updatePassword = async (id, password) => {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+            throw new Error("Invalid password");
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const createUser = async ({ email, username, password }) => {
     try {
         const emailAlreadyInUse = await User.findOne({ email });
@@ -39,8 +107,7 @@ const createUser = async ({ email, username, password }) => {
 
         return { token, user: userWithoutPassword };
     } catch (error) {
-        console.error("Error creating user : ", error.message);
-        throw new Error(error.message);
+        throw error;
     }
 }
 
@@ -60,12 +127,15 @@ const loginUser = async ({ email, password }) => {
 
         return { token, user };
     } catch (error) {
-        throw new Error(error.message);
+        throw error;
     }
 }
 
 module.exports = {
     getUser,
+    updateEmail,
+    updateUsername,
+    updatePassword,
     createUser,
     loginUser,
 };
