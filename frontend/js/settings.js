@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/updateemail', {
+            const response = await fetch('/api/user/email', {
                 method: 'PUT',
                 headers: { 
                     "Authorization": `Bearer ${token}`,
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('username').value;
 
         try {
-            const response = await fetch('/api/updateusername', {
+            const response = await fetch('/api/user/username', {
                 method: 'PUT',
                 headers: { 
                     "Authorization": `Bearer ${token}`,
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/updatepassword', {
+            const response = await fetch('/api/user/password', {
                 method: 'PUT',
                 headers: { 
                     "Authorization": `Bearer ${token}`,

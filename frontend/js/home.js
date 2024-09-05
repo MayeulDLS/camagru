@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
     try {
-        const response = await fetch("http://localhost:5038/api/getuser", {
+        const response = await fetch("/api/user", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`

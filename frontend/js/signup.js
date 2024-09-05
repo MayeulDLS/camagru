@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const userData = { email, username, password };
 
         try {
-            const response = await fetch('/api/createuser', {
+            const response = await fetch('/api/public/createuser', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)

@@ -1,5 +1,6 @@
 const express = require('express');
-const mongoose = require("mongoose");
+const authMiddleware = require("./middleware/authMiddleware");
+const publicRoutes = require("./routes/publicRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
@@ -13,6 +14,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api', userRoutes);
+app.use("/api/public", publicRoutes);
+
+app.use('/api/user', authMiddleware, userRoutes);
 
 module.exports = app;
