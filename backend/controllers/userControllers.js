@@ -80,7 +80,7 @@ const createUserController = async (req, res) => {
 
         const result = await createUser({email, username, password});
 
-        sendEmail(email, "camagru confirmation", `http://localhost:5038/verification?token=${result.token}`)
+        sendEmail(email, "camagru confirmation", `http://localhost:5038/api/public/verification?token=${result.token}`)
 
         res.status(201).send(result);
     } catch (error) {

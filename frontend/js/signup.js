@@ -22,8 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const result = await response.json();
-                localStorage.setItem("token", result.token);
-                window.location.href = 'home.html';
+                window.location.href = 'verification.html';
             } else {
                 const error = await response.json();
                 alert("Erreur : " + error.message);
