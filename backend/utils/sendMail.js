@@ -17,7 +17,6 @@ async function sendEmail(toEmail, subject, body) {
             to: toEmail,
             subject: subject,
             text: body,
-            html: "<b>Ceci est un e-mail avec du texte en HTML</b>"
         };
 
         let info = await transporter.sendMail(mailOptions);

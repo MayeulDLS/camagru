@@ -1,5 +1,6 @@
 const User = require("../models/usersModel.ts");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/jwt.js")
 
 const getUser = async (id) => {
@@ -123,6 +124,10 @@ const loginUser = async ({ email, password }) => {
             throw new Error("Invalid password");
         }
 
+        if (!user.isVerified) {
+            throw new Error("Your email has not been verified");
+        }
+
         const token = generateToken(user);
 
         return { token, user };
@@ -131,6 +136,24 @@ const loginUser = async ({ email, password }) => {
     }
 }
 
+const verifyEmail = async ({ token }) => {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        user.isVerified = true;
+        await user.save();
+
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getUser,
     updateEmail,
@@ -138,4 +161,5 @@ module.exports = {
     updatePassword,
     createUser,
     loginUser,
+    verifyEmail,
 };

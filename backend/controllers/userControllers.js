@@ -1,4 +1,12 @@
-const { getUser, createUser, loginUser, updateEmail, updateUsername, updatePassword } = require("../services/userServices");
+const {
+    getUser,
+    createUser,
+    loginUser,
+    updateEmail,
+    updateUsername,
+    updatePassword,
+    verifyEmail,
+} = require("../services/userServices");
 const { sendEmail } = require("../utils/sendMail");
 
 const getUserController = async (req, res) => {
@@ -72,6 +80,8 @@ const createUserController = async (req, res) => {
 
         const result = await createUser({email, username, password});
 
+        sendEmail(email, "camagru confirmation", `http://localhost:5038/verification?token=${result.token}`)
+
         res.status(201).send(result);
     } catch (error) {
         console.error("Error in User controller : ", error);
@@ -89,12 +99,27 @@ const loginController = async (req, res) => {
 
         const { token, user } = await loginUser({ email, password });
 
-        sendEmail("mdelaserre@hotmail.fr", "hello", "mail envoye");
-
         res.status(200).json({ token, user });
     } catch (error) {
         console.error("Error in login controller : ", error.message);
         res.status(401).send({ message: error.message });
+    }
+};
+
+const verifyController = async (req, res) => {
+    try {
+        const { token } = req.query;
+    
+        if (!token) {
+            return res.status(400).send("Missing token");
+        };
+
+        verifyEmail({ token });
+
+        return res.status(200).send("Your email is now verified");
+
+    } catch (error) {
+        res.status(400).send({ message: error.message });
     }
 };
 
@@ -105,4 +130,5 @@ module.exports = {
     updatePasswordController,
     createUserController,
     loginController,
+    verifyController,
 };
