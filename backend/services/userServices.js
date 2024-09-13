@@ -1,7 +1,8 @@
 const User = require("../models/usersModel.ts");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { generateToken } = require("../utils/jwt.js")
+const { generateToken, generatePasswordToken } = require("../utils/jwt.js")
+const { sendEmail } = require("../utils/sendMail.js")
 
 const getUser = async (id) => {
     const user = await User.findById(id);
@@ -154,6 +155,50 @@ const verifyEmail = async ({ token }) => {
     }
 };
 
+const resetPasswordEmail = async ({ email }) => {
+    try {
+
+        const user = User.findOne(email);
+
+        if (!user) {
+            throw new Error("No user found for this email")
+        }
+
+        const token = generatePasswordToken(user);
+
+        if (!token) {
+            throw new Error("Failure to generate token");
+        }
+
+        sendEmail(email, "Reset password - camagru", `http://localhost:3000/resetpassword.html?token=${token}&email=${email}`);
+
+    } catch (error) {
+        throw error;
+    }
+};
+
+const resetPassword = async (email, password) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(password)) {
+            throw new Error("Invalid password");
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getUser,
     updateEmail,
@@ -162,4 +207,6 @@ module.exports = {
     createUser,
     loginUser,
     verifyEmail,
+    resetPasswordEmail,
+    resetPassword,
 };

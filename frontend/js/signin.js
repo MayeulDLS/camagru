@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     const signinForm = document.getElementById('signin-form');
     signinForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -18,9 +19,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'home.html';
             } else {
                 const error = await response.json();
-                alert("Erreur : " + error.message);
+                alert("Error : " + error.message);
             }
         } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    const resetPassword = document.getElementById("reset-password");
+    resetPassword.addEventListener("click", async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const message = document.getElementById("reset-password-message");
+
+        try {
+            const response = await fetch("/api/public/resetpasswordemail", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const result = await response.json();
+            message.textContent = result.message;
+        } catch (error) {
+            message.textContent = error.message;
             console.error('Error:', error);
         }
     });
