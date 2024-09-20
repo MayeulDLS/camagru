@@ -7,7 +7,7 @@ const picturesRoutes = require("./routes/picturesRoutes");
 
 const app = express();
 
-app.use(bodyParser.json({ limit: '80MB' }));
+app.use(bodyParser.json({ limit: '5MB' }));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
