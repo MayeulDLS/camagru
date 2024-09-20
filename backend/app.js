@@ -1,11 +1,13 @@
 const express = require('express');
+const bodyParser = require("body-parser");
 const authMiddleware = require("./middleware/authMiddleware");
 const publicRoutes = require("./routes/publicRoutes");
 const userRoutes = require("./routes/userRoutes");
+const picturesRoutes = require("./routes/picturesRoutes");
 
 const app = express();
 
-app.use(express.json());
+app.use(bodyParser.json({ limit: '80MB' }));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,5 +19,7 @@ app.use((req, res, next) => {
 app.use("/api/public", publicRoutes);
 
 app.use('/api/user', authMiddleware, userRoutes);
+
+app.use('/api/pictures', authMiddleware, picturesRoutes);
 
 module.exports = app;

@@ -14,7 +14,7 @@ const { sendEmail } = require("../utils/sendMail");
 const getUserController = async (req, res) => {
     try {
         const result = await getUser(req.user.id);
-        res.send(result);
+        res.status(200).send(result);
     } catch (error) {
         console.error("Error in User controller : ", error);
         res.status(500).send({ message: "Internal Sever Error" });

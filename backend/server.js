@@ -1,5 +1,6 @@
 const http = require('http');
 const mongoose = require('mongoose');
+const cloudinary = require("cloudinary").v2;
 const dotenv = require('dotenv');
 const app = require('./app');
 const { normalizePort, errorHandler } = require('./errorHandling');
@@ -41,4 +42,11 @@ mongoose.connect(mongoUri, {
 .catch(err => {
  console.error('Failed to connect to MongoDB', err);
  process.exit(1); // Arrêter le processus si la connexion échoue
+});
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.CLOUD_API_KEY, 
+  api_secret: process.env.CLOUD_API_SECRET,
+  secure: true
 });
