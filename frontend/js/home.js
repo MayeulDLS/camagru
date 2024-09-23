@@ -68,6 +68,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const context = canvas.getContext("2d");
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const frameToDraw = new Image();
+        frameToDraw.src = frame.src;
+        context.drawImage(frameToDraw, 0, 0, canvas.width, canvas.height);
     })
 
     // post picture
