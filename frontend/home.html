@@ -17,12 +17,17 @@
     </header>
     <main>
         <h1 id="title">Welcome</h1>
-        <video id="video" width="320" height="240" autoplay></video>
+        <div id="webcam-container" class="webcam-container">
+            <video id="video" width="320" height="240" autoplay></video>
+        </div>
+        <button id="square-frame-button">Square frame</button>
+        <button id="circle-frame-button">Circle frame</button>
         <button id="capture">Take a picture</button>
         <form id="canvas-form">
             <canvas id="canvas" width="320" height="240"></canvas>
             <button type="submit">Post picture</button>
         </form>
+        <!-- <input type="file" id="imageInput"> -->
     </main>
     <footer>
         <p>&copy; 2024 My Camagru</p>
