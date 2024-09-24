@@ -8,14 +8,14 @@ const getPictures = async () => {
     return pictures;
 }
 
-const postPicture = async (id, imageData) => {
+const postPicture = async (id, image) => {
     try {
         const user = await User.findById(id);
         if (!user) {
             throw new Error("No user for this id");
         }
-
-        const result = await cloudinary.uploader.upload(imageData);
+        
+        const result = await cloudinary.uploader.upload(image);
 
         const newPic = new Picture({
             user: id,

@@ -1,3 +1,5 @@
+const { mergeImageAndFrame } = require("../utils/mergeImageAndFrame")
+const { downloadImageFromUrl } = require("../utils/fetchImg")
 const {
     getPictures,
     postPicture,
@@ -16,20 +18,24 @@ const getPicturesController = async (req, res) => {
 const postPictureController = async (req, res) => {
     try {
         const imageData = req.body.image;
+        const frameUrl = req.body.frame;
 
-        if (!imageData) {
-            return res.status(400).send({ message: "File is missing" });
+        if (!imageData || !frameUrl) {
+            return res.status(400).send({ message: "File or frame is missing" });
         }
 
-        const base64Data = imageData.split(',')[1]; // Extraire la partie base64 de la Data URL
+        const base64Image = imageData.split(',')[1]; // Extraire la partie base64 de la Data URL
+
         // Calculer la taille de la chaîne base64 en octets
-        const sizeInBytes = (base64Data.length * 3) / 4 - (base64Data.endsWith('==') ? 2 : base64Data.endsWith('=') ? 1 : 0);
+        const sizeInBytes = (base64Image.length * 3) / 4 - (base64Image.endsWith('==') ? 2 : base64Image.endsWith('=') ? 1 : 0);
         const maxSizeInBytes = 5 * 1024 * 1024; // 5 Mo
         if (sizeInBytes > maxSizeInBytes) {
             return res.status(413).send({ message: "File too big, limit is 5MB" });
         }
+
+        const mergedImage = await mergeImageAndFrame(base64Image, frameUrl);
         
-        const result = await postPicture(req.user.id, imageData);
+        const result = await postPicture(req.user.id, mergedImage);
 
         res.status(200).send(result);
     } catch (error) {

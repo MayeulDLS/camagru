@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ image: imageDataUrl })
+                    body: JSON.stringify({ image: imageDataUrl, frame: frame.src })
                 });
         
                 if (response.ok) {
