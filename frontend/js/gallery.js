@@ -10,20 +10,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch("../utils/loggedInHeader.html");
         const content = await response.text();
         header.innerHTML = content;
+        // logout
+        document.getElementById("logout").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "signin.html";
+        })
     }
 
-    // logout
-    document.getElementById("logout").addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "signin.html";
-    })
-
     let currentPage = 1;
-    const response = await fetch(`/api/pictures/total`, {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
+    const response = await fetch(`/api/public/numberofpictures`, {
+        method: "GET"
     });
     const totalData = await response.json();
     const totalPages = Math.ceil(totalData.total / 5);
@@ -32,11 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const displayPictures = async () => {
 
-        const response = await fetch(`/api/pictures?page=${currentPage}`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+        const response = await fetch(`/api/public/pictures?page=${currentPage}`, {
+            method: "GET"
         });
 
         const data = await response.json();
