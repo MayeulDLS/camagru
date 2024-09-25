@@ -3,6 +3,7 @@ const {
     getPictures,
     postPicture,
     getNumberOfPictures,
+    getPicture,
 } = require("../services/picturesServices")
 
 const getPicturesController = async (req, res) => {
@@ -54,8 +55,25 @@ const postPictureController = async (req, res) => {
     }
 }
 
+const getPictureController = async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (!id) {
+            throw new Error("Missing id");
+        }
+
+        const picture = await getPicture(id);
+
+        res.status(200).send(picture);
+
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
 module.exports = {
     getPicturesController,
     postPictureController,
     getNumberOfPicturesController,
+    getPictureController,
 }

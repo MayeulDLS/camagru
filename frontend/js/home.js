@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
 
     // select frame
-    const webcamContainer = document.getElementById("webcam-container");
     const canvasContainer = document.getElementById("canvas-container");
     const squareFrameButton = document.getElementById("square-frame-button");
     const circleFrameButton = document.getElementById("circle-frame-button");
-    const frames = ["https://res.cloudinary.com/dx8krot13/image/upload/v1726842282/ab088edf1303b946bb01e6bd670eb81c_fgcxnl.png", "https://res.cloudinary.com/dx8krot13/image/upload/v1726840089/cchqkqelrzkdwlya4zx5.png"];
+    const frames = ["https://res.cloudinary.com/dx8krot13/image/upload/v1726842282/ab088edf1303b946bb01e6bd670eb81c_fgcxnl.png",
+        "https://res.cloudinary.com/dx8krot13/image/upload/v1726840089/cchqkqelrzkdwlya4zx5.png"];
     const frame = document.createElement("img");
     squareFrameButton.addEventListener("click", () => {
         appendFrame(frame, frames[0]);

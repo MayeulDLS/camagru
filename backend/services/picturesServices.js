@@ -41,8 +41,24 @@ const postPicture = async (id, image) => {
     }
 }
 
+const getPicture = async (id) => {
+    try {
+        const picture = await Picture.findById(id);
+
+        if (!picture) {
+            throw new Error("No picture found for this id");
+        }
+
+        return picture;
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getPictures,
     postPicture,
     getNumberOfPictures,
+    getPicture,
 }
