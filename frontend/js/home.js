@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'signin.html';
         return;
     }
+    const header = document.querySelector("header");
+    const response = await fetch("../utils/loggedInHeader.html");
+    const content = await response.text();
+    header.innerHTML = content;
 
     // get user infos
     try {

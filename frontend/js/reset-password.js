@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'signin.html';
         return;
     }
+    const header = document.querySelector("header");
+    const response = await fetch("../utils/loggedOutHeader.html");
+    const content = await response.text();
+    header.innerHTML = content;
     
     const passwordUpdate = document.getElementById('reset-password-form');
     passwordUpdate.addEventListener('submit', async (event) => {

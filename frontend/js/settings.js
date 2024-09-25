@@ -1,9 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem("token");
     if (!token) {
         window.location.href = 'signin.html';
         return;
     }
+    const header = document.querySelector("header");
+    const response = await fetch("../utils/loggedInHeader.html");
+    const content = await response.text();
+    header.innerHTML = content;
 
     document.getElementById("logout").addEventListener("click", () => {
         localStorage.removeItem("token");

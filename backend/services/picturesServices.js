@@ -2,10 +2,20 @@ const Picture = require("../models/picturesModel");
 const User = require("../models/usersModel");
 const cloudinary = require("cloudinary").v2;
 
-const getPictures = async () => {
-    const pictures = await Picture.find();
+const getPictures = async (page) => {
+    const pictures = await Picture.find()
+    .sort({ _id: -1 })
+    .skip((page - 1) * 5)
+    .limit(5);
 
     return pictures;
+}
+
+const getNumberOfPictures = async () => {
+    
+    const total = await Picture.countDocuments();
+
+    return {total};
 }
 
 const postPicture = async (id, image) => {
@@ -14,7 +24,7 @@ const postPicture = async (id, image) => {
         if (!user) {
             throw new Error("No user for this id");
         }
-        
+
         const result = await cloudinary.uploader.upload(image);
 
         const newPic = new Picture({
@@ -34,4 +44,5 @@ const postPicture = async (id, image) => {
 module.exports = {
     getPictures,
     postPicture,
+    getNumberOfPictures,
 }

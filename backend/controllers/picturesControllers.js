@@ -1,19 +1,30 @@
 const { mergeImageAndFrame } = require("../utils/mergeImageAndFrame")
-const { downloadImageFromUrl } = require("../utils/fetchImg")
 const {
     getPictures,
     postPicture,
+    getNumberOfPictures,
 } = require("../services/picturesServices")
 
 const getPicturesController = async (req, res) => {
+    const { page } = req.query;
     try {
-        const result = await getPictures();
-        res.status(200).json(result);
+        const result = await getPictures(page);
+        res.status(200).send(result);
     } catch (error) {
         console.error("Error in User controller : ", error);
         res.status(500).send({ message: error.message });
     }
 };
+
+const getNumberOfPicturesController = async (req, res) => {
+    try {
+        const result = await getNumberOfPictures();
+        res.status(200).send(result);
+    } catch (error) {
+        console.error("Error in User controller : ", error);
+        res.status(500).send({ message: error.message });
+    }
+}
 
 const postPictureController = async (req, res) => {
     try {
@@ -46,4 +57,5 @@ const postPictureController = async (req, res) => {
 module.exports = {
     getPicturesController,
     postPictureController,
+    getNumberOfPicturesController,
 }

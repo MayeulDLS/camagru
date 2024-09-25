@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const header = document.querySelector("header");
+    const response = await fetch("../utils/loggedOutHeader.html");
+    const content = await response.text();
+    header.innerHTML = content;
+
     const signupForm = document.getElementById('signup-form');
     signupForm.addEventListener('submit', async (event) => {
         event.preventDefault();
