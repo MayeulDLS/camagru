@@ -56,9 +56,37 @@ const getPicture = async (id) => {
     }
 }
 
+const deletePicture = async (id, userId) => {
+    try {
+
+        const picture = await Picture.findById(id);
+        if (!picture) {
+            throw new Error("Picture not found")
+        }
+        if (userId !== picture.user) {
+            throw new Error("You don't have the rights to delete this picture");
+        }
+
+        const picturePublicId = picture.imgUrl.split("/").pop().split(".")[0];
+
+        cloudinary.uploader.destroy(picturePublicId);
+
+        const deletedPicture = await Picture.findByIdAndDelete(id);
+        if (!deletedPicture) {
+            throw new Error("Error while deleting picture");
+        }
+
+        return { message: "Picture deleted" };
+
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getPictures,
     postPicture,
     getNumberOfPictures,
     getPicture,
+    deletePicture,
 }

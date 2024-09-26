@@ -4,7 +4,9 @@ const {
     postPicture,
     getNumberOfPictures,
     getPicture,
+    deletePicture,
 } = require("../services/picturesServices")
+const jwt = require('jsonwebtoken');
 
 const getPicturesController = async (req, res) => {
     const { page } = req.query;
@@ -71,9 +73,31 @@ const getPictureController = async (req, res) => {
     }
 }
 
+const deletePictureController = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        if (!id) {
+            throw new Error("Missing id");
+        }
+
+        const token = req.header('Authorization').replace('Bearer ', '');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        const response = await deletePicture(id, userId);
+
+        res.status(200).send(response);
+
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
 module.exports = {
     getPicturesController,
     postPictureController,
     getNumberOfPicturesController,
     getPictureController,
+    deletePictureController,
 }
