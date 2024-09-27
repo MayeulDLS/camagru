@@ -5,6 +5,7 @@ const {
     getNumberOfPictures,
     getPicture,
     deletePicture,
+    likePicture,
 } = require("../services/picturesServices")
 const jwt = require('jsonwebtoken');
 
@@ -73,6 +74,24 @@ const getPictureController = async (req, res) => {
     }
 }
 
+const likePictureController = async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+    
+    try {
+        if (!id || !userId) {
+            throw new Error("Missing id");
+        }
+
+        const picture = await likePicture(id, userId);
+
+        res.status(200).send(picture);
+
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
 const deletePictureController = async (req, res) => {
     const { id } = req.params;
 
@@ -100,4 +119,5 @@ module.exports = {
     getNumberOfPicturesController,
     getPictureController,
     deletePictureController,
+    likePictureController,
 }

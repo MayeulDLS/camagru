@@ -56,6 +56,22 @@ const getPicture = async (id) => {
     }
 }
 
+const likePicture = async (id, userId) => {
+    const picture = await Picture.findById(id);
+
+    if (!picture) {
+        throw new Error("No picture found for this id");
+    }
+
+    if (picture.liked.includes(userId)) {
+        await picture.updateOne({ $pull: { liked: userId } }, { new: true });
+    } else {
+        await picture.updateOne({ $addToSet: { liked: userId } }, { new: true });
+    }
+
+    return picture;
+}
+
 const deletePicture = async (id, userId) => {
     try {
 
@@ -88,5 +104,6 @@ module.exports = {
     postPicture,
     getNumberOfPictures,
     getPicture,
+    likePicture,
     deletePicture,
 }

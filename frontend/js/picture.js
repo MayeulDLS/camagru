@@ -60,11 +60,88 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const user = await userResponse.json();
 
-        // if (pictureData.user === user._id) {
+        if (pictureData.user === user._id) {
             container.appendChild(deleteButton);
-        // }
+        }
+
+        const likeButton = document.createElement("button");
+        likeButton.innerText = `${pictureData.liked.includes(user._id) ? "Dislike" : "Like"} this picture`;
+        likeButton.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            try {
+                const response = await fetch(`/api/pictures/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userId: user._id })
+                });
+
+                if (response.ok) {
+                    alert("Like or dislike updated");
+                } else {
+                    alert("An error occured, please try again");
+                }
+
+            } catch (error) {
+                alert(error.message);
+            }
+        })
+        container.appendChild(likeButton);
 
     } catch (error) {
         alert(error.message);
     }
+
+    try {
+        const response = await fetch(`/api/comments/${id}`, {
+            method: "GET",
+        });
+
+        const commentsData = await response.json();
+
+        const commentsContainer = document.getElementById("comments-container");
+
+        commentsData.forEach(comment => {
+            const commentElement = document.createElement("p");
+            commentElement.innerText = comment.content;
+            commentsContainer.appendChild(commentElement);
+        });
+
+    } catch (error) {
+        alert(error.message);
+    }
+
+    const commentInput = document.getElementById("comment-form");
+    commentInput.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const input = document.getElementById("comment-input");
+        const comment = input.value;
+
+        try {
+            const response = await fetch("/api/comments", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    pictureId: id,
+                    comment: comment,
+                }),
+            })
+
+            if (response.ok) {
+                alert("Your comment has been posted");
+            } else {
+                alert("An error has occured, please try again");
+            }
+
+        } catch (error) {
+            alert(error.message);
+        }
+    })
 });

@@ -4,6 +4,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const publicRoutes = require("./routes/publicRoutes");
 const userRoutes = require("./routes/userRoutes");
 const picturesRoutes = require("./routes/picturesRoutes");
+const commentsRoutes = require("./routes/commentsRoutes");
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.use("/api/public", publicRoutes);
 app.use('/api/user', authMiddleware, userRoutes);
 
 app.use('/api/pictures', authMiddleware, picturesRoutes);
+
+app.use('/api/comments', commentsRoutes);
 
 module.exports = app;
