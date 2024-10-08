@@ -8,6 +8,7 @@ const {
     verifyEmail,
     resetPasswordEmail,
     resetPassword,
+    updateCommentNotification,
 } = require("../services/userServices");
 const { sendEmail } = require("../utils/sendMail");
 
@@ -163,6 +164,23 @@ const resetPasswordController = async (req, res) => {
     }
 };
 
+const updateCommentNotificationController = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        if (!userId) {
+            return res.status(400).send({ message: "Missing user Id" });
+        }
+
+        const updatedUser = await updateCommentNotification(userId);
+
+        return res.status(200).send(updatedUser);
+    } catch (error) {
+        console.error("Error in User controller : ", error);
+        return res.status(400).send({ message: error.message });
+    }
+};
+
 module.exports = {
     getUserController,
     updateEmailController,
@@ -173,4 +191,5 @@ module.exports = {
     verifyController,
     resetPasswordEmailController,
     resetPasswordController,
+    updateCommentNotificationController,
 };

@@ -199,6 +199,22 @@ const resetPassword = async (email, password) => {
     }
 };
 
+const updateCommentNotification = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        user.commentNotification = !user.commentNotification;
+        const res = await user.save();
+
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getUser,
     updateEmail,
@@ -209,4 +225,5 @@ module.exports = {
     verifyEmail,
     resetPasswordEmail,
     resetPassword,
+    updateCommentNotification,
 };

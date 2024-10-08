@@ -26,7 +26,9 @@ const postComment = async (userId, pictureId, comment) => {
                 throw new Error("User not found to send mail");
             }
 
-            sendEmail(user.email, "A new comment has been posted !", "A user has commented your picture.");
+            if (user.commentNotification) {
+                sendEmail(user.email, "A new comment has been posted !", "A user has commented your picture.");
+            }
         }
 
         return res;
