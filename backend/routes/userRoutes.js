@@ -12,6 +12,6 @@ router.get("/", getUserController);
 router.put("/email", updateEmailController);
 router.put("/username", updateUsernameController);
 router.put("/password", updatePasswordController);
-router.put("/commentNotification", updateCommentNotificationController);
+router.put("/commentnotification", updateCommentNotificationController);
 
 module.exports = router;

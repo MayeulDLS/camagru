@@ -14,6 +14,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = "signin.html";
     })
 
+    // get user infos
+    try {
+        const response = await fetch("/api/user", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (response.status === 401) {
+            window.location.href = 'signin.html';
+            return;
+        }
+
+        const user = await response.json();
+        const commentNotificationButton = document.getElementById("comment-notification");
+        commentNotificationButton.innerText = user.commentNotification ? "Deactivate comment notificatons" : "Activate comment notifications";
+    } catch (error) {
+        console.error(error);
+    }
+
     const emailUpdate = document.getElementById('email-update');
     emailUpdate.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -105,5 +126,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
     });
+
+    const commentNotificationButton = document.getElementById("comment-notification");
+    commentNotificationButton.addEventListener("click", async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch("/api/user/commentnotification", {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                commentNotificationButton.innerText = data.commentNotification ? "Deactivate comment notificatons" : "Activate comment notifications";
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error("Error : ", error);
+        }
+    })
 
 });
