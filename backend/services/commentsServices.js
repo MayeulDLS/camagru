@@ -1,4 +1,7 @@
 const Comment = require("../models/commentModel");
+const Picture = require("../models/picturesModel");
+const User = require("../models/usersModel");
+const { sendEmail } = require("../utils/sendMail");
 
 const postComment = async (userId, pictureId, comment) => {
     try {
@@ -8,9 +11,25 @@ const postComment = async (userId, pictureId, comment) => {
             content: comment
         });
 
-        await newComment.save();
+        const res = await newComment.save();
 
-        return newComment;
+        if (res) {
+
+            const picture = await Picture.findById(pictureId);
+            if (!picture) {
+                throw new Error("Picture not found");
+            }
+
+            const user = await User.findById(picture.user);
+
+            if (!user) {
+                throw new Error("User not found to send mail");
+            }
+
+            sendEmail(user.email, "A new comment has been posted !", "A user has commented your picture.");
+        }
+
+        return res;
 
     } catch (error) {
         throw error;
