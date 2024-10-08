@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 if (response.ok) {
-                    alert("Like or dislike updated");
+                    likeButton.innerText = `${likeButton.innerText.includes("Dislike") ? "Like" : "Dislike"} this picture`;
                 } else {
                     alert("An error occured, please try again");
                 }
@@ -135,7 +135,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
 
             if (response.ok) {
-                alert("Your comment has been posted");
+                const commentsContainer = document.getElementById("comments-container");
+                const commentElement = document.createElement("p");
+                commentElement.innerText = comment;
+                commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
             } else {
                 alert("An error has occured, please try again");
             }

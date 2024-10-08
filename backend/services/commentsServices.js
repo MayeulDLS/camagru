@@ -19,7 +19,7 @@ const postComment = async (userId, pictureId, comment) => {
 
 const getComments = async (pictureId) => {
     try {
-        const comments = await Comment.find({ picture: pictureId });
+        const comments = await Comment.find({ picture: pictureId }).sort({ createdAt: -1 });
 
         if (!comments) {
             throw new Error("Error while getting comments");
