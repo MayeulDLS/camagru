@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const commentElement = document.createElement("p");
                 commentElement.innerText = comment;
                 commentsContainer.insertBefore(commentElement, commentsContainer.firstChild);
+                input.value = "";
             } else {
                 alert("An error has occured, please try again");
             }

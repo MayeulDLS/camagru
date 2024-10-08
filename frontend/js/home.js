@@ -66,17 +66,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     // print picture
     const canvas = document.getElementById("canvas");
     const captureButton = document.getElementById("capture");
+    const imageInput = document.getElementById("image-input");
+    const context = canvas.getContext("2d");
     captureButton.addEventListener("click", () => {
         if (!frame.src) {
             alert("Please select a frame before taking a picture");
             return;
         }
-        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
     })
+    imageInput.addEventListener("change", (event) => {
+        if (!frame.src) {
+            alert("Please select a frame before taking a picture");
+            imageInput.value = "";
+            return;
+        }
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+    
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Dessiner l'image sur le canvas quand elle est chargée
+                context.clearRect(0, 0, canvas.width, canvas.height); // Nettoyer le canvas avant d'afficher une nouvelle image
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            img.src = e.target.result; // Définir la source de l'image à l'URL de l'image chargée
+        };
+        reader.readAsDataURL(file); // Lire le fichier comme une URL de données
+    });
 
     // post picture
     const canvasForm = document.getElementById("canvas-form");
+    const postPictureButton = document.getElementById("post-picture");
     canvasForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -86,6 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const imageDataUrl = canvas.toDataURL("image/png");
+
+        postPictureButton.disabled = true;
 
             try {
                 const response = await fetch("/api/pictures", {
@@ -106,6 +134,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         
             } catch (error) {
                 alert(error.message);
+            } finally {
+                postPictureButton.disabled = false;
             }
     });
 
@@ -123,37 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         img.style.zIndex = "2";
         img.style.pointerEvents = "none";
     }
-
-    // document.getElementById('imageInput').addEventListener('change', async (event) => {
-    //     const file = event.target.files[0];
-    //     const maxSizeInBytes = 5 * 1024 * 1024; // 5 Mo
-    
-    //     if (file.size > maxSizeInBytes) {
-    //         alert('File is too big, limit is 5 Mo');
-    //         event.target.value = ''; // Réinitialiser l'input
-    //         return;
-    //     }
-    //     try {
-    //         const response = await fetch("/api/pictures", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Authorization": `Bearer ${token}`,
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify({ image: imageDataUrl })
-    //         });
-    
-    //         if (response.ok) {
-    //             alert("Picture uploaded");
-    //         } else {
-    //             const data = response.json();
-    //             alert(data.message);
-    //         }
-    
-    //     } catch (error) {
-    //         alert(error.message);
-    //     }
-    // });
 });
 
 function isCanvasEmpty(canvas) {
