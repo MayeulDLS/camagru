@@ -7,7 +7,6 @@ const {
     deletePicture,
     likePicture,
 } = require("../services/picturesServices")
-const jwt = require('jsonwebtoken');
 
 const getPicturesController = async (req, res) => {
     const { page } = req.query;
@@ -43,9 +42,9 @@ const postPictureController = async (req, res) => {
 
         // Calculer la taille de la chaîne base64 en octets
         const sizeInBytes = (base64Image.length * 3) / 4 - (base64Image.endsWith('==') ? 2 : base64Image.endsWith('=') ? 1 : 0);
-        const maxSizeInBytes = 5 * 1024 * 1024; // 5 Mo
+        const maxSizeInBytes = 1024 * 1024; // 1 Mo
         if (sizeInBytes > maxSizeInBytes) {
-            return res.status(413).send({ message: "File too big, limit is 5MB" });
+            return res.status(413).send({ message: "File too big, limit is 1MB" });
         }
 
         const mergedImage = await mergeImageAndFrame(base64Image, frameUrl);
@@ -100,11 +99,7 @@ const deletePictureController = async (req, res) => {
             throw new Error("Missing id");
         }
 
-        const token = req.header('Authorization').replace('Bearer ', '');
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
-
-        const response = await deletePicture(id, userId);
+        const response = await deletePicture(id, req.user.id);
 
         res.status(200).send(response);
 

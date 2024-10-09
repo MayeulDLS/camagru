@@ -79,7 +79,7 @@ const deletePicture = async (id, userId) => {
         if (!picture) {
             throw new Error("Picture not found")
         }
-        if (userId !== picture.user) {
+        if (userId !== picture.user.toString()) {
             throw new Error("You don't have the rights to delete this picture");
         }
 

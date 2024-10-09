@@ -8,7 +8,7 @@ const commentsRoutes = require("./routes/commentsRoutes");
 
 const app = express();
 
-app.use(bodyParser.json({ limit: '5MB' }));
+app.use(bodyParser.json({ limit: '1mb' }));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
