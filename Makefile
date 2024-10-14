@@ -7,7 +7,7 @@ COMPOSE=docker-compose -f $(COMPOSE_FILE)
 # Cible par défaut : lancer les services
 .PHONY: up
 up:
-	$(COMPOSE) up
+	$(COMPOSE) up -d
 
 # Arrêter les services
 .PHONY: down
